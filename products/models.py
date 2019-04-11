@@ -1,10 +1,12 @@
-import random
 import os
-from django.db import models
-from django.db.models.signals import pre_save, post_save
+import random
 
+from django.db import models
+from django.db.models.signals import pre_save
+from django.urls import reverse
 
 from .utils import unique_slug_generator
+
 
 def get_filename_ext(filepath):
     base_name = os.path.basename(filepath)
@@ -17,7 +19,8 @@ def upload_image_path(instance, filename):
     #print(filename)
     new_filename = random.randint(1,3910209312)
     name, ext = get_filename_ext(filename)
-    final_filename = '{new_filename}{ext}'.format(new_filename=new_filename, ext=ext)
+    final_filename = '{new_filename}{ext}'.format(new_filename=new_filename,
+                                                  ext=ext)  # f'{new_filename}{ext}'--python  3.6
     return "products/{new_filename}/{final_filename}".format(
             new_filename=new_filename,
             final_filename=final_filename
@@ -57,11 +60,13 @@ class Product(models.Model):
     image = models.ImageField(upload_to=upload_image_path, null=True, blank=True)
     featured = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     objects = ProductManager()
 
     def get_absolute_url(self):
-        return "/products/{slug}/".format(slug=self.slug)
+        # return "/products/{slug}/".format(slug=self.slug)
+        return reverse("products:detail", kwargs={"slug": self.slug})
 
     def __str__(self):
         return self.title
@@ -71,10 +76,13 @@ class Product(models.Model):
 
 
 def product_pre_save_receiver(sender, instance, *args, **kwargs):
+    print("product_pre_save_receiver")
     if not instance.slug:
+        print("instance slug")
         instance.slug = unique_slug_generator(instance)
 
 
+# do something right before the model is saved in database
 pre_save.connect(product_pre_save_receiver, sender=Product)
 
 
