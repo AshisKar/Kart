@@ -11,7 +11,7 @@ from .utils import unique_slug_generator
 
 def get_filename_ext(filepath):
     base_name = os.path.basename(filepath)
-    name, ext = os.path.splitext(base_name)
+    name, ext = os.path.splitext(base_name) #core
     return name, ext
 
 
@@ -63,6 +63,7 @@ class ProductManager(models.Manager):
     def search(self, query):
         return self.get_queryset().active().search(query)
 
+
 class Product(models.Model):
     title = models.CharField(max_length=120)
     slug = models.SlugField(blank=True, unique=True)
@@ -84,6 +85,11 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+@property
+def name(self):
+    return self.title
 
 
 def product_pre_save_receiver(sender, instance, *args, **kwargs):

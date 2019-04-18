@@ -6,6 +6,7 @@ from products.models import Product
 from products.utils import unique_slug_generator
 # Create your models here.
 
+
 class Tag(models.Model):
     title = models.CharField(max_length=120)
     slug = models.SlugField()
@@ -20,5 +21,6 @@ class Tag(models.Model):
 def tag_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
+
 
 pre_save.connect(tag_pre_save_receiver, sender=Tag)
