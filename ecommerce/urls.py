@@ -19,9 +19,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
-from carts.views import cart_home
-
-from .views import home_page, about_page, contact_page, login_page, register_page
+from django.contrib.auth.views import LogoutView
+from accounts.views import login_page, register_page, guest_register_view
+from .views import home_page, about_page, contact_page
 
 # from django.conf.urls import url--1.11
 app_name = 'products'
@@ -31,6 +31,8 @@ urlpatterns = [
     path('about/', about_page, name='about'),
     path('contact/', contact_page, name='contact'),
     path('login/', login_page, name='login'),
+    path('register/guest/', guest_register_view, name='guest_register'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('cart/',include(("carts.urls", "carts"), namespace='cart')),
     path('register/', register_page, name='register'),
     path('products/', include(("products.urls", "products"), namespace='products')),
