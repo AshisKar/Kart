@@ -7,12 +7,12 @@ from .forms import ContactForm, LoginForm, RegisterForm
 
 def home_page(request):
     context = {
-        "title": "Welcome to Hippo World",
-        "content": " This is Hippo. Say Hi!!.",
+        "title": "The Bully Store",
+        "content": "We are the biggest store of bullies. Whoever it may be , our specialist bullies can make their life miserable.",
 
     }
     if request.user.is_authenticated:
-        context["premium_content"] = "YEAHHHHHH"
+        context["premium_content"] = "Hire Now!!!!"
     return render(request, "home_page.html", context)
 
 

@@ -15,14 +15,14 @@
 
     <div class='row'>
         <div class='col'>
-            <img src="{% static 'img/hippo.jpg' %}" class='img-fluid' height="200" width="400"/>
+            <img src="{% static 'img/homepage.JPG' %}" class='img-fluid' height="600" width="800"/>
             <p>{{ content }}</p>
         </div>
     </div>
     {% if request.user.is_authenticated %}
         <div class='row'>
             <div class='col'>
-                <h1>Premium</h1>
+                <h1>Instant discount</h1>
                 {{ premium_content }}
             </div>
         </div>

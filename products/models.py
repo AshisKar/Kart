@@ -46,7 +46,7 @@ class ProductQuerySet(models.query.QuerySet):
 
 class ProductManager(models.Manager):
     def get_queryset(self):
-        return ProductQuerySet(self.model, using=self._db)
+        return ProductQuerySet(self.model, using=self._db) # to define on which database the underlying queryset the manager uses should operate on
 
     def all(self):
         return self.get_queryset().active()
@@ -95,7 +95,6 @@ def name(self):
 def product_pre_save_receiver(sender, instance, *args, **kwargs):
     print("product_pre_save_receiver")
     if not instance.slug:
-        print("instance slug")
         instance.slug = unique_slug_generator(instance)
 
 
