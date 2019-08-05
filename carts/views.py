@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from orders.models import Order
 from .models import Cart
@@ -17,6 +18,8 @@ def cart_home(request):
 
 def cart_update(request):
     product_id = request.POST.get('product_id') #get id
+    if request.is_ajax():
+        print("Ajax request")
     if product_id is not None:
         try:
             product_obj = Product.objects.get(id=product_id) #get obj
@@ -26,10 +29,19 @@ def cart_update(request):
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         if product_obj in cart_obj.products.all():  #if present then remove else add
             cart_obj.products.remove(product_obj)
+            added = False
         else:
             cart_obj.products.add(product_obj) # cart_obj.products.add(product_id)
-            request.session['cart_items'] = cart_obj.products.count()  #update count
-
+            added = True
+        request.session['cart_items'] = cart_obj.products.count()  #update count
+        # return redirect(product_obj.get_absolute_url())
+        if request.is_ajax():  # Asynchronous JavaScript And XML / JSON
+            print("Ajax request")
+            json_data = {
+                "added": added,
+                "removed": not added,
+            }
+            return JsonResponse(json_data)
     return redirect("cart:home")
 
 
